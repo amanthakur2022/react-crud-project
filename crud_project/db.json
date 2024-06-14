@@ -1,0 +1,14 @@
+{
+    "user":[
+        {
+            "id":1,
+             "firstName":"Gurleen",
+             "lastName":"Kaur",
+             "dateOfBirth":"16-August-1998",
+             "gender":"female",
+             "address":"Jalandhar",
+             "password":"12345",
+             "confirmPassword":"12345"
+        }
+    ]
+}
