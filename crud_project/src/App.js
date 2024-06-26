@@ -2,6 +2,7 @@ import Login from './login';
 import Register from './register';
 import './App.css';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import PageNotFound from './404';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route exact path="" Component={Login} />
             <Route path="/register" Component={Register} />
+            <Route path="*" Component={PageNotFound} />
           </Routes>
         </Router>
       </header>
