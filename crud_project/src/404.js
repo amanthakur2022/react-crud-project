@@ -5,11 +5,11 @@ function PageNotFound() {
     const navigate = useNavigate();
     return (
         <div className='align-items-center d-flex justify-content-center h-full'>
-            <div class="card">
-                <div class="card-body">
+            <div className="card">
+                <div className="card-body">
                     <h1 className='display-1 fw-bold'>404</h1>
                     <h1 className='display-1 fw-medium'>Page not found</h1>
-                    <button type="submit" class="btn btn-primary" onClick={() => navigate(-1)}>Go Back</button>
+                    <button type="submit" className="btn btn-primary" onClick={() => navigate(-1)}>Go Back</button>
                 </div>
             </div>
         </div>
