@@ -1,145 +1,142 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from "react";
 import './register.css';
 
 function Register() {
-    // const [input, setInput] = useState({
-    //     username: "",
-    //     email: "",
-    //     gender: "",
-    //     phone: "",
-    //     password: "",
-    //     cPassword: "",
-    // });
-    // const handleChange = (e) => {
-    // const newObj = {...input, [e.target.name]: e.target.value}
-    //     setInput(newObj)
-    // };
-    const [username, setUsername] = useState("");
-    const [userErr, setUserErr] = useState(false);
-    const [email, setEmail] = useState("");
-    const [emailErr, setEmailErr] = useState(false);
-    const [phone, setPhone] = useState("");
-    const [phoneErr, setPhoneErr] = useState(false);
-    const [gender, setGender] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordErr, setPasswordErr] = useState(false);
-    const [cPassword, setCPassword] = useState("");
-    const [cPasswordErr, setCPasswordErr] = useState(false);
-    // const [submittedInput, setSubmittedInput] = useState("");
+    // for initializing values to input fields
+    const initialValues = { username: "", email: "", gender: "", phone: "", password: "", cPassword: "" };
+    // set state to input fields
+    const [input, setInput] = useState(initialValues);
+    // state for errors
+    const [formErrors, setFormErrors] = useState({});
+    // state for submit button
+    const [isSubmit, setIsSubmit] = useState(false);
 
-    const userHandler = (e) => {
-        let item = e.target.value;
-        if (!item) {
-            setUserErr(true)
-        }
-        else {
-            setUserErr(false)
-        }
-        setUsername(e.target.value)
-    }
-    const emailHandler = (e) => {
-        let item = e.target.value;
-        const emailRegex = /^([\w]{1,})([^\W])(@)([\w]{1,})(\.[\w]{1,})+$/;
+    // function for change in the input
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setInput({ ...input, [name]: value });
+    };
 
-        if (!emailRegex.test(item)) {
-            setEmailErr(true);
+    // function for handling form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setFormErrors(validate(input));
+        setIsSubmit(true);
+    };
+
+    // useEffect to check if we have errors 
+    useEffect(() => {
+        console.log(formErrors);
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+            console.log(input);
         }
-        else {
-            setEmailErr(false);
-        }
-        setEmail(e.target.value)
-    }
-    const phoneHandler = (e) => {
-        let item = e.target.value;
+        console.log(Object.keys(formErrors));
+    }, [formErrors]);
+
+    // setting validation on all the fields
+    const validate = (values) => {
+        const errors = {};
+        const regex = /^([\w]{1,})([^\W])(@)([\w]{1,})(\.[\w]{1,})+$/;
         const phoneRegex = /^\d{10}$/;
-
-        if (!phoneRegex.test(item)) {
-            setPhoneErr(true);
+        if (!values.username) {
+            errors.username = "This field is required!";
         }
         else {
-            setPhoneErr(false);
+            errors.username = "";
         }
-        setPhone(e.target.value)
-    }
-    const passwordHandler = (e) => {
-        let item = e.target.value;
-        const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+        if (!values.email) {
+            errors.email = "This field is required!";
+        } else if (!regex.test(values.email)) {
+            errors.email = "This is not a valid email format!";
+        }
+        if (!values.phone) {
+            errors.phone = "This field is required!";
+        } else if (!phoneRegex.test(values.phone)) {
+            errors.phone = "Please enter a 10 digit phone number"
+        }
+        if (values.gender == "default" || !values.gender) {
+            errors.gender = "This field is required!"
+        }
+        if (!values.password) {
+            errors.password = "This field is required!";
+        } else if (values.password.length < 4) {
+            errors.password = "Password must be more than 4 characters";
+        } else if (values.password.length > 10) {
+            errors.password = "Password cannot exceed more than 10 characters";
+        }
+        if (!values.cPassword) {
+            errors.cPassword = "This field is required!";
+        } else if (values.cPassword !== values.password) {
+            errors.cPassword = "Passwords doesn't match";
+        }
+        return errors;
+    };
 
-        if (!passwordRegex.test(item)) {
-            setPasswordErr(true);
-        }
-        else {
-            setPasswordErr(false);
-        }
-        setPassword(e.target.value)
-    }
-    const cPasswordHandler = (e) => {
-        let item = e.target.value;
-
-        if (item !== password) {
-            setCPasswordErr(true);
-        }
-        else {
-            setCPasswordErr(false);
-        }
-        setCPassword(e.target.value)
-    }
+    // jsx part of the component
     return (
         <div className="register-header">
-            <h1>Register Yourself</h1>
-            <h5>Please enter your details</h5>
-            <form className="row g-3 w-75" onSubmit={(e) => e.preventDefault()} noValidate >
-                <div className="col-md-12 form-group">
+            <form onSubmit={handleSubmit} className="row g-3 w-75">
+                <h1>Register Yourself</h1>
+                <h5>Please enter your details</h5>
+                <div className="col-md-12">
                     <label htmlFor="inputUsername" className="form-label float-start">Username</label>
-                    <input type="text" className="form-control" id="inputUsername" value={username}
-                        onChange={userHandler} required />
-                    {userErr ? <p className='fs-6 text-start text-danger mb-0'>Username is required</p> : ""}
+                    <input className="form-control" id="inputUsername"
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={input.username}
+                        onChange={handleChange}
+                    />
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.username}</p>
                 </div>
-                <div className="col-md-12 form-group">
+                <div className="col-md-12">
                     <label htmlFor="inputEmail" className="form-label float-start">Email</label>
-                    <input type="email" className="form-control" id="inputEmail" value={email}
-                        onChange={emailHandler} required />
-                    {emailErr ? <p className='fs-6 text-start text-danger mb-0'>Invalid Email Format</p> : ""}
+                    <input className="form-control" id="inputEmail"
+                        type="text"
+                        name="email"
+                        placeholder="Email"
+                        value={input.email}
+                        onChange={handleChange}
+                    />
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.email}</p>
                 </div>
-                <div className="col-md-12 form-group">
+                <div className="col-md-12">
                     <label htmlFor="inputFName" className="form-label float-start">Gender</label>
-                    <select className="form-select" value={gender}
-                        onChange={(e) => setGender(e.target.value)} required>
+                    <select className="form-select" value={input.gender} name="gender"
+                        onChange={handleChange} required>
                         <option value="default">Please Select</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.gender}</p>
                 </div>
-                <div className="col-md-12 form-group">
+                <div className="col-md-12">
                     <label htmlFor="inputPhone" className="form-label float-start">Phone</label>
-                    <input type="tel" className="form-control" id="inputPhone" value={phone}
-                        onChange={phoneHandler} required />
-                    {phoneErr ? <p className='fs-6 text-start text-danger mb-0'>Invalid Phone Number Format</p> : ""}
+                    <input type="tel" className="form-control" id="inputPhone" name="phone" value={input.phone}
+                        onChange={handleChange} />
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.phone}</p>
                 </div>
-                <div className="col-md-12 form-group">
+                <div className="col-md-12">
                     <label htmlFor="inputPassword" className="form-label float-start">Password</label>
-                    <input type="password" className="form-control" id="inputPassword" value={password}
-                        onChange={passwordHandler} required />
-                    {passwordErr ? <p className='fs-6 text-start text-danger mb-0'>A minimum 8 characters password contains a combination of uppercase, lowercase letter, special characters and number</p> : ""}
-
+                    <input
+                        type="password" className="form-control" id="inputPassword"
+                        name="password"
+                        placeholder="Password"
+                        value={input.password}
+                        onChange={handleChange}
+                    />
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.password}</p>
                 </div>
                 <div className="col-md-12 form-group">
                     <label htmlFor="inputCPassword" className="form-label float-start">Confirm Password</label>
-                    <input type="password" className="form-control" id="inputCPassword" value={cPassword}
-                        onChange={cPasswordHandler} required />
-                    {cPasswordErr ? <p className='fs-6 text-start text-danger mb-0'>Passwords doesn't match</p> : ""}
+                    <input type="password" className="form-control" name="cPassword" id="inputCPassword" value={input.cPassword}
+                        onChange={handleChange} />
+                    <p className='fs-6 text-start text-danger mb-0'>{formErrors.cPassword}</p>
 
                 </div>
-                <div className="col-md-12 form-group">
-                    <button type="submit" className="btn btn-primary" onClick={() => console.log(username, email, phone, gender, password, cPassword)}>Sign in</button>
-                    {/* <button type="submit" className="btn btn-primary" onClick={() => console.log(input)}>Sign in</button> */}
-                </div>
+                <button type="submit" className="btn btn-primary" onClick={() => console.log(input)}>Signup</button>
             </form>
-            <div className='mt-5'>
-                <h6>Already have an account?</h6>
-                <a className="btn btn-secondary" href="/" role="button">Login here</a>
-            </div>
         </div>
     );
 }
