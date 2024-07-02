@@ -1,8 +1,7 @@
 import Login from './login';
 import Register from './register';
-import Copy from './copy';
 import './App.css';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './404';
 import Dashboard from './dashboard';
 
@@ -19,7 +18,6 @@ function App() {
             <Route path="/login" Component={Login} />
             <Route path="/register" Component={Register} />
             <Route path="/dashboard" Component={Dashboard} />
-            <Route path="/copy" Component={Copy} />
             <Route path="*" Component={PageNotFound} />
           </Routes>
         </Router>

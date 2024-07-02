@@ -1,14 +1,27 @@
-import './dashboard.css';
+import './index.css';
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from 'react';
 
 function Dashboard() {
-
+    // const users = [
+    //     { id: 1, username: "mark", email: "mark@gmail.com", gender: "Male", phone: "9898989898", password: "poiuyt" },
+    //     { id: 2, username: "jacob", email: "jacob@outlook.com", gender: "Male", phone: "8787878787", password: "mnbvc" },
+    //     { id: 3, username: "larry", email: "larry@rediffmail.com", gender: "Female", phone: "7676767676", password: "asdfgh" }
+    // ];
+    const [users, setUsers] = useState([])
+    useEffect(() => {
+        fetch("http://localhost:5000/user").then((result) => {
+            result.json().then((resp) => {
+                setUsers(resp)
+            })
+        })
+    })
     // jsx part of the component
     return (
-        <div className="dashboard-header">
-            <h1>Dashboard</h1>
-            <table className="table table-striped table-bordered">
+        <div className="fs bg-white d-flex flex-column align-items-center text-black min-vh-100">
+            <h1 className='my-5'>Dashboard</h1>
+            <table className="table table-striped table-bordered w-auto">
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
@@ -21,39 +34,19 @@ function Dashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>mark</td>
-                        <td>mark@gmail.com</td>
-                        <td>Male</td>
-                        <td>9898989898</td>
-                        <td>poiuyt</td>
-                        <td><a class="btn text-warning" href="#" role="button"><FontAwesomeIcon icon={faPen} /></a>
-                            <a class="btn text-danger" href="#" role="button"><FontAwesomeIcon icon={faTrash} /></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>jacob</td>
-                        <td>jacob@outlook.com</td>
-                        <td>Male</td>
-                        <td>8787878787</td>
-                        <td>mnbvc</td>
-                        <td><a class="btn text-warning" href="#" role="button"><FontAwesomeIcon icon={faPen} /></a>
-                            <a class="btn text-danger" href="#" role="button"><FontAwesomeIcon icon={faTrash} /></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>larry</td>
-                        <td>larry@rediffmail.com</td>
-                        <td>Female</td>
-                        <td>7676767676</td>
-                        <td>asdfgh</td>
-                        <td><a class="btn text-warning" href="#" role="button"><FontAwesomeIcon icon={faPen} /></a>
-                            <a class="btn text-danger" href="#" role="button"><FontAwesomeIcon icon={faTrash} /></a>
-                        </td>
-                    </tr>
+                    {users.map((user) => (
+                        <tr key={user.id}>
+                            <th scope="row">{user.id}</th>
+                            <td>{user.username}</td>
+                            <td>{user.email}</td>
+                            <td>{user.gender}</td>
+                            <td>{user.phone}</td>
+                            <td>{user.password}</td>
+                            <td><a class="btn text-warning" href="#" role="button" title="Edit"><FontAwesomeIcon icon={faPen} /></a>
+                                <a class="btn text-danger" href="#" role="button" title="Delete"><FontAwesomeIcon icon={faTrash} /></a>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 

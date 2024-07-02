@@ -1,14 +1,51 @@
 {
-    "user":[
-        {
-            "id":1,
-             "firstName":"Gurleen",
-             "lastName":"Kaur",
-             "dateOfBirth":"16-August-1998",
-             "gender":"female",
-             "address":"Jalandhar",
-             "password":"12345",
-             "confirmPassword":"12345"
-        }
-    ]
+  "user": [
+    {
+      "id": "1",
+      "username": "GurleenKaur",
+      "email": "gurleen@gmail.com",
+      "dateOfBirth": "16-August-1998",
+      "gender": "Female",
+      "phone": "5555555555",
+      "address": "Jalandhar",
+      "password": "12345",
+      "cPassword": "12345"
+    },
+    {
+      "id": "30ca",
+      "username": "gurleen",
+      "email": "gurleen@qwerty.com",
+      "gender": "Female",
+      "phone": "1111111111",
+      "password": "11111",
+      "cPassword": "11111"
+    },
+    {
+      "id": "d21a",
+      "username": "gurleen",
+      "email": "gurleen@qwerty.com",
+      "gender": "Female",
+      "phone": "1111111111",
+      "password": "11111",
+      "cPassword": "11111"
+    },
+    {
+      "id": "6846",
+      "username": "admin",
+      "email": "admin@gmail.com",
+      "gender": "Male",
+      "phone": "9878789878",
+      "password": "1234",
+      "cPassword": "1234"
+    },
+    {
+      "id": "955e",
+      "username": "admin123",
+      "email": "admin123@gmail.com",
+      "gender": "Male",
+      "phone": "8675488758",
+      "password": "qwerty",
+      "cPassword": "qwerty"
+    }
+  ]
 }
