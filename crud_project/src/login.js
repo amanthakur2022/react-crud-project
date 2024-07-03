@@ -5,16 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    // for initializing values to input fields
     const initialValues = { email: "", password: "" };
-    // set state to input fields
     const [input, setInput] = useState(initialValues);
-    // state for errors
     const [formErrors, setFormErrors] = useState({});
-    // state for submit button
     const [isSubmit, setIsSubmit] = useState(false);
-    // state for show password
     const [isPassVisible, setIsPassVisible] = useState(false);
+    const navigate = useNavigate();
 
     // function for change in the input
     const handleChange = (e) => {
@@ -26,12 +22,11 @@ function Login() {
     };
 
     // function for handling form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setFormErrors(validate(input));
         setIsSubmit(true);
-        login();
-        // authenticate();
+        // login();
     };
 
     const handleBlur = (e) => {
@@ -46,9 +41,10 @@ function Login() {
     // useEffect to check if we have errors 
     useEffect(() => {
         if (Object.keys(formErrors).length === 0 && isSubmit) {
+            login();
             console.log(input);
         }
-    }, [formErrors, isSubmit, input]);
+    }, [formErrors, isSubmit]);
 
     // setting validation on all the fields
     const validate = (values) => {
@@ -57,7 +53,7 @@ function Login() {
         if (!values.email) {
             errors.email = "This field is required!";
         } else if (!regex.test(values.email)) {
-            errors.email = "This is not a valid email format!";
+            errors.email = "Invalid email format!";
         }
         if (!values.password) {
             errors.password = "This field is required!";
@@ -67,59 +63,60 @@ function Login() {
         return errors;
     };
 
-    // const clearInput = () => {
-    //     setInput({
-    //         ...input,
-    //         email: "",
-    //         password: ""
-    //     });
-    // }
-    const navigate = useNavigate();
-    // const authenticate = () => {
-    //     if (input.email === "gurleen@qwerty.com" && input.password === "12345") {
-    //         alert("Signed in successfully");
-    //         navigate('/dashboard');
-    //     }
-    //     else {
-    //         alert("Incorrect Email or Password");
-    //     }
-    // }
-
     async function login() {
-        let result = await fetch("http://localhost:5000/user", {
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(input),
-        });
-        result = await result.json();
-        localStorage.setItem("id", JSON.stringify(result))
-        navigate("/dashboard");
-    }
+        try {
+            let response = await fetch("http://localhost:5000/user");
+            if (!response.ok) {
+                alert('Network response was not ok');
+            }
+            const database = await response.json();
+            console.log(database);
+            for (let i = 0; i < database.length; i++) {
+                if (database[i].email === input.email && database[i].password === input.password) {
+                    setTimeout(() => {
+                        navigate("/dashboard");
+                    }, 500);
+                    return;
+                }
+            }
+            alert('Invalid credentials');
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    };
 
-    // const login = async () => {
+    // async function login() {
+    //     let database;
+    //     fetch("http://localhost:5000/user")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             database = data;
+    //             console.log(database);
+    //         })
     //     try {
-    //         let result = await fetch("http://localhost:5000/user/login", {
+    //         let response = await fetch("http://localhost:5000/user", {
     //             method: 'POST',
     //             headers: {
-    //                 "Accept": "application/json",
     //                 "Content-Type": "application/json"
     //             },
-    //             body: JSON.stringify(input),
+    //             body: JSON.stringify({}),
     //         });
-
-    //         if (!result.ok) {
-    //             throw new Error('Authentication failed');
+    //         if (!response.ok) {
+    //             alert('Network response was not ok');
     //         }
-
-    //         let userInfo = await result.json();
-    //         localStorage.setItem("user-info", JSON.stringify(userInfo));
-    //         navigate("/dashboard");
+    //         const userData = await response.json();
+    //         console.log(userData);
+    //         if (!userData || !userData.email || !userData.password) {
+    //             alert('Invalid credentials');
+    //         }
+    //         for (let i = 0; i < database.length; i++) {
+    //             if (database[i].email === input.email && database[i].password === input.password) {
+    //                 navigate("/dashboard");
+    //                 return;
+    //             }
+    //         }
     //     } catch (error) {
-    //         console.error('Error during login:', error);
-    //         alert('Incorrect Email or Password');
+    //         console.error('Login error:', error);
     //     }
     // };
 
