@@ -6,14 +6,33 @@ import { useEffect, useState } from 'react';
 function Dashboard() {
     const initialValues = { username: "", email: "", gender: "", phone: "", password: "", cPassword: "" };
     const [input, setInput] = useState(initialValues);
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState([]);
+    const [deleteUserId, setDeleteUserId] = useState(null);
     useEffect(() => {
+        getUsers();
+    })
+    const getUsers = () => {
         fetch("http://localhost:5000/user").then((result) => {
             result.json().then((resp) => {
                 setUsers(resp)
             })
         })
-    })
+    }
+
+    const deleteUser = (id) => {
+        fetch(`http://localhost:5000/user/${id}`, {
+            method: "DELETE"
+        }).then((result) => {
+            result.json().then((resp) => {
+                console.warn(resp);
+                getUsers();
+                setDeleteUserId(null);
+            })
+        })
+    }
+    const handleDeleteModalOpen = (id) => {
+        setDeleteUserId(id);
+    }
     // jsx part of the component
     return (
         <div className="fs bg-white d-flex flex-column align-items-center text-black min-vh-100">
@@ -40,14 +59,14 @@ function Dashboard() {
                             <td>{user.phone}</td>
                             <td>{user.password}</td>
                             <td><a className="btn text-warning" href="#" role="button" title="Edit" data-bs-toggle="modal" data-bs-target="#editModal"><FontAwesomeIcon icon={faPen} /></a>
-                                <a className="btn text-danger" href="#" role="button" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal"><FontAwesomeIcon icon={faTrash} /></a>
+                                <a className="btn text-danger" href="#" role="button" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => handleDeleteModalOpen(user.id)}><FontAwesomeIcon icon={faTrash} /></a>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
-            <div className="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -127,19 +146,19 @@ function Dashboard() {
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="deleteModalLabel">Delete</h1>
-                            <button type="button" class="btn-close fs-6" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="deleteModalLabel">Delete</h1>
+                            <button type="button" className="btn-close fs-6" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body fs-5">
+                        <div className="modal-body fs-5">
                             Do you really want to delete this entry?
                         </div>
-                        <div class="modal-footer border-0">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
+                        <div className="modal-footer border-0">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => deleteUser(deleteUserId)}>Delete</button>
                         </div>
                     </div>
                 </div>
