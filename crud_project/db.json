@@ -8,7 +8,7 @@
       "gender": "Female",
       "phone": "5555555555",
       "address": "Jalandhar",
-      "password": "12345",
+      "password": "gurleen123",
       "cPassword": "12345"
     },
     {
@@ -30,13 +30,58 @@
       "cPassword": "1234"
     },
     {
-      "id": "955e",
-      "username": "admin123",
-      "email": "admin123@gmail.com",
+      "id": "f18f",
+      "username": "kanchan",
+      "email": "kanchan@gmail.com",
+      "gender": "Female",
+      "phone": "9898989898",
+      "password": "kanchan123",
+      "cPassword": "kanchan123"
+    },
+    {
+      "id": "3fba",
+      "username": "sunil",
+      "email": "sunilsalaria1993@gmail.com",
       "gender": "Male",
-      "phone": "8675488758",
-      "password": "qwerty",
-      "cPassword": "qwerty"
+      "phone": "6975759864",
+      "password": "sunil123",
+      "cPassword": "sunil123"
+    },
+    {
+      "id": "c066",
+      "username": "aman",
+      "email": "aman@gmail.com",
+      "gender": "Male",
+      "phone": "6767676767",
+      "password": "aman123",
+      "cPassword": "aman123"
+    },
+    {
+      "id": "bb0f",
+      "username": "chandeep",
+      "email": "chandeep@gmail.com",
+      "gender": "Male",
+      "phone": "5656565656",
+      "password": "chandeep",
+      "cPassword": "chandeep"
+    },
+    {
+      "id": "ab8a",
+      "username": "sushma",
+      "email": "sushma@gmail.com",
+      "gender": "Female",
+      "phone": "9878989798",
+      "password": "sushma123",
+      "cPassword": "sushma123"
+    },
+    {
+      "id": "8de0",
+      "username": "rajeev",
+      "email": "rajeev@gmail.com",
+      "gender": "Male",
+      "phone": "7878787878",
+      "password": "rajeev123",
+      "cPassword": "rajeev123"
     }
   ]
 }

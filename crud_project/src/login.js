@@ -26,7 +26,6 @@ function Login() {
         e.preventDefault();
         setFormErrors(validate(input));
         setIsSubmit(true);
-        // login();
     };
 
     const handleBlur = (e) => {
@@ -84,6 +83,30 @@ function Login() {
             console.error('Login error:', error);
         }
     };
+
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch('http://localhost:5000/user', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ input }),
+    //         });
+
+    //         if (response.ok) {
+    //             // Handle successful login (e.g., store token)
+    //             const data = await response.json();
+    //             console.log('Login successful:', data);
+    //         } else {
+    //             // Handle login error (e.g., display error message)
+    //             console.error('Login failed. Please check your credentials.');
+    //         }
+    //     } catch (error) {
+    //         console.error('An error occurred during login:', error);
+    //     }
+    // };
 
     // async function login() {
     //     let database;

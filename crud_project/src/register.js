@@ -47,8 +47,9 @@ function Register() {
     useEffect(() => {
         if (Object.keys(formErrors).length === 0 && isSubmit) {
             console.log(input);
+            SaveUser();
         }
-    }, [formErrors, isSubmit, input]);
+    }, [formErrors, isSubmit]);
 
     // setting validation on all the fields
     const validate = (values) => {
@@ -106,13 +107,13 @@ function Register() {
                 console.warn('resp', resp)
             })
         })
-        navigate('/dashboard');
+        navigate('/login');
     }
 
     // jsx part of the component
     return (
         <div className="fs bg-white d-flex flex-column align-items-center justify-content-center text-black w-50 rounded-5 min-vh-100">
-            <form onSubmit={handleSubmit} className="row g-3 w-75">
+            <form onSubmit={handleSubmit} className="row g-3 w-75" method="POST">
                 <h1>Register Yourself</h1>
                 <h5>Please enter your details</h5>
                 <div className="col-md-12">
@@ -223,7 +224,7 @@ function Register() {
                     </div>
                     {formErrors.cPassword && <p className='fs-6 text-start text-danger mb-0'>{formErrors.cPassword}</p>}
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={SaveUser}>Signup</button>
+                <button type="submit" className="btn btn-primary">Signup</button>
             </form>
             <div className='mt-5'>
                 <h6>Already have an account?</h6>

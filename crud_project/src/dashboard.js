@@ -8,6 +8,9 @@ function Dashboard() {
     const [value, setValue] = useState(initialValues);
     const [users, setUsers] = useState([]);
     const [userId, setUserId] = useState(null);
+    const [searchInput, setSearchInput] = useState("");
+    const [selectGender, setSelectGender] = useState("")
+    const [selectId, setSelectId] = useState("")
     useEffect(() => {
         getUsers();
     }, [])
@@ -16,10 +19,51 @@ function Dashboard() {
     const getUsers = () => {
         fetch("http://localhost:5000/user").then((result) => {
             result.json().then((resp) => {
-                setUsers(resp)
+                setUsers(resp);
             })
         })
     }
+    const Search = (e) => {
+        setSearchInput(e.target.value);
+    }
+    const genderSearch = (e) => {
+        setSelectGender(e.target.value);
+    }
+    const idSearch = (e) => {
+        setSelectId(e.target.value);
+    }
+
+
+    const searchFilter = users.filter((user) => {
+        if (searchInput === "" && selectGender === "" && selectId === "") {
+            return user
+        }
+        else if (selectGender || selectId) {
+            return ((selectGender && user.gender.toLowerCase().includes(selectGender.toLowerCase())) ||
+                (selectId && user.id.toLowerCase().includes(selectId.toLowerCase()))
+            )
+        }
+        // else if (selectGender) {
+        //     return (user.gender.toLowerCase().includes(selectGender.toLowerCase()))
+        // }
+        // else if (selectId) {
+        //     return (user.id.toLowerCase().includes(selectId.toLowerCase()))
+        // }
+        else {
+            return (user.id.toLowerCase().includes(searchInput)) ||
+                (user.username.toLowerCase().includes(searchInput)) ||
+                (user.email.toLowerCase().includes(searchInput)) ||
+                (user.gender.toLowerCase().includes(searchInput)) ||
+                (user.phone.toLowerCase().includes(searchInput)) ||
+                (user.password.toLowerCase().includes(searchInput))
+        }
+        // return searchInput === "" ? user : ((user.id.toLowerCase().includes(searchInput)) ||
+        //     (user.username.toLowerCase().includes(searchInput)) ||
+        //     (user.email.toLowerCase().includes(searchInput)) ||
+        //     (user.gender.toLowerCase().includes(searchInput)) ||
+        //     (user.phone.toLowerCase().includes(searchInput)) ||
+        //     (user.password.toLowerCase().includes(searchInput)))
+    });
     // function to delete user data
     const deleteUser = (id) => {
         fetch(`http://localhost:5000/user/${id}`, {
@@ -54,7 +98,6 @@ function Dashboard() {
         try {
             let response = await fetch(`http://localhost:5000/user/${id}`);
             const userData = await response.json();
-            console.log(userData);
             setValue(userData)
         } catch (error) {
             console.error('Login error:', error);
@@ -68,7 +111,37 @@ function Dashboard() {
     // jsx part of the component
     return (
         <div className="fs bg-white d-flex flex-column align-items-center text-black min-vh-100">
-            <h1 className='my-5'>Dashboard</h1>
+            <h1 className='my-3'>Dashboard</h1>
+            {/* search bar */}
+            <input
+                className="form-control w-25 mb-3"
+                id="id"
+                type="text"
+                name="id"
+                value={searchInput}
+                onChange={Search}
+                placeholder="Search" />
+            {/* filters */}
+            <div className='d-flex gap-3 mb-3'>
+                <span className="badge text-bg-primary">Filters</span>
+                <select
+                    className="form-select" value={selectGender}
+                    name="gender" onChange={genderSearch} >
+                    <option value="">Please Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input
+                    className="form-control"
+                    id="id"
+                    type="text"
+                    name="id"
+                    placeholder='id'
+                    onChange={idSearch}
+                />
+            </div>
+            {/* table for data view */}
             <table className="table table-striped table-bordered w-auto">
                 <thead>
                     <tr>
@@ -82,7 +155,7 @@ function Dashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user) => (
+                    {searchFilter.map((user) => (
                         <tr key={user.id}>
                             <th scope="row">{user.id}</th>
                             <td>{user.username}</td>
