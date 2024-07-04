@@ -10,7 +10,9 @@ function Dashboard() {
     const [userId, setUserId] = useState(null);
     useEffect(() => {
         getUsers();
-    })
+    }, [])
+
+    // function to get all users data
     const getUsers = () => {
         fetch("http://localhost:5000/user").then((result) => {
             result.json().then((resp) => {
@@ -18,7 +20,7 @@ function Dashboard() {
             })
         })
     }
-
+    // function to delete user data
     const deleteUser = (id) => {
         fetch(`http://localhost:5000/user/${id}`, {
             method: "DELETE"
@@ -30,6 +32,24 @@ function Dashboard() {
             })
         })
     }
+
+    // function to update user data
+    const updateUser = () => {
+        fetch(`http://localhost:5000/user/${value.id}`, {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
+        }).then((result) => {
+            result.json().then((resp) => {
+                console.warn(resp);
+                getUsers();
+            })
+        })
+    }
+    // function to get user data
     async function read(id) {
         try {
             let response = await fetch(`http://localhost:5000/user/${id}`);
@@ -40,6 +60,8 @@ function Dashboard() {
             console.error('Login error:', error);
         }
     };
+
+    // function to open the modal and set id
     const handleModalOpen = (id) => {
         setUserId(id);
     }
@@ -92,24 +114,25 @@ function Dashboard() {
                                         id="id"
                                         type="text"
                                         name="id"
-                                        value={value.id}
+                                        placeholder={value.id}
                                         disabled />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputUsername" className="form-label float-start">Username</label>
                                     <input
                                         className="form-control"
-                                        id="inputUsername"
                                         type="text"
                                         name="username"
                                         placeholder="Username"
-                                        value={value.username} />
+                                        value={value.username}
+                                        onChange={(e) => setValue({ ...value, username: e.target.value })} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputFName" className="form-label float-start">Gender</label>
                                     <select
                                         className="form-select"
                                         value={value.gender}
+                                        onChange={(e) => setValue({ ...value, gender: e.target.value })}
                                         name="gender" >
                                         <option value="default">Please Select</option>
                                         <option value="Male">Male</option>
@@ -122,36 +145,36 @@ function Dashboard() {
                                     <input
                                         type="tel"
                                         className="form-control"
-                                        id="inputPhone"
                                         name="phone"
                                         placeholder="Phone Number"
-                                        value={value.phone} />
+                                        value={value.phone}
+                                        onChange={(e) => setValue({ ...value, phone: e.target.value })} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputEmail" className="form-label float-start">Email</label>
                                     <input
                                         className="form-control"
-                                        id="inputEmail"
                                         type="text"
                                         name="email"
                                         placeholder="Email"
-                                        value={value.email} />
+                                        value={value.email}
+                                        onChange={(e) => setValue({ ...value, email: e.target.value })} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputPassword" className="form-label float-start">Password</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="inputPassword"
                                         name="password"
                                         placeholder="Password"
-                                        value={value.password} />
+                                        value={value.password}
+                                        onChange={(e) => setValue({ ...value, password: e.target.value })} />
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer border-0">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-primary">Update</button>
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => updateUser(userId)}>Update</button>
                         </div>
                     </div>
                 </div>
