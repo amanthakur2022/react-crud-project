@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 
 function Dashboard() {
     const initialValues = { username: "", email: "", gender: "", phone: "", password: "", cPassword: "" };
-    const [input, setInput] = useState(initialValues);
+    const [value, setValue] = useState(initialValues);
     const [users, setUsers] = useState([]);
-    const [deleteUserId, setDeleteUserId] = useState(null);
+    const [userId, setUserId] = useState(null);
     useEffect(() => {
         getUsers();
     })
@@ -26,12 +26,22 @@ function Dashboard() {
             result.json().then((resp) => {
                 console.warn(resp);
                 getUsers();
-                setDeleteUserId(null);
+                setUserId(null);
             })
         })
     }
-    const handleDeleteModalOpen = (id) => {
-        setDeleteUserId(id);
+    async function read(id) {
+        try {
+            let response = await fetch(`http://localhost:5000/user/${id}`);
+            const userData = await response.json();
+            console.log(userData);
+            setValue(userData)
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    };
+    const handleModalOpen = (id) => {
+        setUserId(id);
     }
     // jsx part of the component
     return (
@@ -58,8 +68,8 @@ function Dashboard() {
                             <td>{user.gender}</td>
                             <td>{user.phone}</td>
                             <td>{user.password}</td>
-                            <td><a className="btn text-warning" href="#" role="button" title="Edit" data-bs-toggle="modal" data-bs-target="#editModal"><FontAwesomeIcon icon={faPen} /></a>
-                                <a className="btn text-danger" href="#" role="button" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => handleDeleteModalOpen(user.id)}><FontAwesomeIcon icon={faTrash} /></a>
+                            <td><a className="btn text-warning" href="#" role="button" title="Edit" data-bs-toggle="modal" data-bs-target="#editModal" onClick={() => read(user.id)}><FontAwesomeIcon icon={faPen} /></a>
+                                <a className="btn text-danger" href="#" role="button" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => handleModalOpen(user.id)}><FontAwesomeIcon icon={faTrash} /></a>
                             </td>
                         </tr>
                     ))}
@@ -82,7 +92,7 @@ function Dashboard() {
                                         id="id"
                                         type="text"
                                         name="id"
-                                        value="id"
+                                        value={value.id}
                                         disabled />
                                 </div>
                                 <div className="col-md-6">
@@ -93,13 +103,13 @@ function Dashboard() {
                                         type="text"
                                         name="username"
                                         placeholder="Username"
-                                        value={input.username} />
+                                        value={value.username} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputFName" className="form-label float-start">Gender</label>
                                     <select
                                         className="form-select"
-                                        value={input.gender}
+                                        value={value.gender}
                                         name="gender" >
                                         <option value="default">Please Select</option>
                                         <option value="Male">Male</option>
@@ -115,7 +125,7 @@ function Dashboard() {
                                         id="inputPhone"
                                         name="phone"
                                         placeholder="Phone Number"
-                                        value={input.phone} />
+                                        value={value.phone} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputEmail" className="form-label float-start">Email</label>
@@ -125,7 +135,7 @@ function Dashboard() {
                                         type="text"
                                         name="email"
                                         placeholder="Email"
-                                        value={input.email} />
+                                        value={value.email} />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="inputPassword" className="form-label float-start">Password</label>
@@ -135,7 +145,7 @@ function Dashboard() {
                                         id="inputPassword"
                                         name="password"
                                         placeholder="Password"
-                                        value={input.password} />
+                                        value={value.password} />
                                 </div>
                             </form>
                         </div>
@@ -158,7 +168,7 @@ function Dashboard() {
                         </div>
                         <div className="modal-footer border-0">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => deleteUser(deleteUserId)}>Delete</button>
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => deleteUser(userId)}>Delete</button>
                         </div>
                     </div>
                 </div>
